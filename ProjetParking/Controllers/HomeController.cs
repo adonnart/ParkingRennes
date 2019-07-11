@@ -8,6 +8,7 @@ namespace ProjetParking.Controllers
 {
     public class HomeController : Controller
     {
+        //LOL?
         public ActionResult Index()
         {
             return View();
