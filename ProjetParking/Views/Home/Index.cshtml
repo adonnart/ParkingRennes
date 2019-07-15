@@ -27,9 +27,9 @@
 
         var markers = [];
 
-        var wsg84 = '48.114,-1.683, 3000';
+        var wsg84 = '48.114,-1.683, 1000';
 
-        $.get("https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=export-api-parking-citedia",
+        $.get("https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=export-api-parking-citedia", { 'geofilter.distance': wsg84 },
             function (data, status) {
                 var records = data.records;
                 console.log(records);
