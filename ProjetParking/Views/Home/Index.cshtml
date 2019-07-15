@@ -2,15 +2,19 @@
     ViewBag.Title = "Home Page";
 }
 
-<form class="mt-3">
-    <div class="form-group">
-        <label for="recherche">Rechercher</label>
-        <input type="text" class="form-control" id="recherche" aria-describedby="recherche" placeholder="Adresse, Lieu">
+<div class="absolute">
+    <div class="container">
+        <form class="mt-3" id="formSeacrh">
+            <div class="form-group">
+                <label for="recherche">Rechercher</label>
+                <input type="text" class="form-control" id="recherche" aria-describedby="recherche" placeholder="Adresse, Lieu">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <button class="btn btn-primary">Rechercher</button>
-    </div>
-</form>
+</div>
 
 <div id="mapid"></div>
 
@@ -87,6 +91,26 @@
         
 
         mymap.invalidateSize();
+
+        $('#formSeacrh').submit(function (e) {
+            e.preventDefault();
+            $.get("https://api.opencagedata.com/geocode/v1/json?q=" + $('#recherche').val()+"&key=5b590915216c4680bb6bf799921cf73b",
+                function (data, status) {
+                    console.log(data.results[0].geometry);
+                    circles.clearLayers();
+                    wsg84 = data.results[0].geometry.lat + ',' + data.results[0].geometry.lng + ',500';
+                    updateMap(wsg84);
+                    var marker = L.marker([data.results[0].geometry.lat, data.results[0].geometry.lng]).addTo(mymap);
+                    var circle = L.circle([data.results[0].geometry.lat, data.results[0].geometry.lng], {
+                        color: '#ff9999',
+                        fillColor: '#ffcccc',
+                        fillOpacity: 0.5,
+                        radius: 500
+                    }).addTo(mymap);
+                    circles.addLayer(circle);
+                    circles.addLayer(marker);
+                });
+        });
 
     </script>
 }
