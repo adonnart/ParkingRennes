@@ -18,6 +18,14 @@
     <script type="text/javascript">
         var mymap = L.map('mapid').setView([48.038, -1.692], 13);
 
+        var parkingIcon = L.icon({
+            iconUrl: 'https://img.icons8.com/color/48/000000/parking.png',
+
+            iconSize: [30, 30], // size of the icon
+            iconAnchor: [15, 15], // point of the icon which will correspond to marker's location
+            popupAnchor: [0, -18] // point from which the popup should open relative to the iconAnchor
+        });
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
@@ -25,24 +33,57 @@
             accessToken: 'your.mapbox.access.token'
         }).addTo(mymap);
 
-        var markers = [];
+        var markers = L.layerGroup();
+        mymap.addLayer(markers);
+
+        var circles = L.layerGroup();
+        mymap.addLayer(circles);
 
         var wsg84 = '48.114,-1.683, 1000';
 
-        $.get("https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=export-api-parking-citedia", { 'geofilter.distance': wsg84 },
-            function (data, status) {
-                var records = data.records;
-                console.log(records);
-                for (var i = 0; i < records.length; i++) {
-                    var record = data.records[i];
-                    var x = record.geometry.coordinates[1];
-                    var y = record.geometry.coordinates[0];
-                    var marker = L.marker([x, y]).addTo(mymap);
-                    markers.push(marker);
-                    markers[i].bindPopup("<b>" + record.fields.key + "</b><br>" + record.fields.free + "/" + record.fields.max + "<br><span class='badge badge-success'>" + record.fields.status + "</span>").openPopup();
-                    
-                };
-            });
+        updateMap(null);
+
+        function onMapClick(e) {
+            circles.clearLayers();
+            wsg84 = e.latlng.lat + ',' + e.latlng.lng + ',500';
+            updateMap(wsg84);
+            var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+            var circle = L.circle([e.latlng.lat, e.latlng.lng], {
+                color: '#ff9999',
+                fillColor: '#ffcccc',
+                fillOpacity: 0.5,
+                radius: 500
+            }).addTo(mymap);
+            circles.addLayer(circle);
+            circles.addLayer(marker);
+        }
+
+        mymap.on('click', onMapClick);
+
+        function updateMap(wsg) {
+            $.get("https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=export-api-parking-citedia", { 'geofilter.distance': wsg },
+                function (data, status) {
+                    var records = data.records;
+                    markers.clearLayers();
+                    var first = null;
+                    console.log(records);
+
+                    for (var i = 0; i < records.length; i++) {
+                        var record = data.records[i];
+                        var x = record.geometry.coordinates[1];
+                        var y = record.geometry.coordinates[0];
+                        var marker = L.marker([x, y], { icon: parkingIcon }).addTo(mymap);
+                        marker.bindPopup("<b>" + record.fields.key + "</b><br>" + record.fields.free + "/" + record.fields.max + "<br><span class='badge badge-success'>" + record.fields.status + "</span>").openPopup();
+                        markers.addLayer(marker);
+                        if (i == 0) {
+                            first = marker;
+                        }
+                    };
+                    if (first != null) {
+                        first.openPopup();
+                    }
+                });
+        }
         
 
         mymap.invalidateSize();
