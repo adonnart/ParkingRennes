@@ -4,8 +4,7 @@
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -23,5 +22,19 @@ textarea {
 }
 
 #mapid {
-    height: 500px;
+    height: 700px;
+}
+
+.absolute {
+    z-index: 1000;
+    position: absolute;
+    left: 70px;
+    top: 65px;
+    border-radius: 10px;
+    background-color: white;
+    -moz-box-shadow: 0px 5px 10px 0px #a3a3a3;
+    -webkit-box-shadow: 0px 5px 10px 0px #a3a3a3;
+    -o-box-shadow: 0px 5px 10px 0px #a3a3a3;
+    box-shadow: 0px 5px 10px 0px #a3a3a3;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color=#a3a3a3, Direction=180, Strength=10);
 }
