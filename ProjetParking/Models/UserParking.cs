@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,31 +8,11 @@ namespace ProjetParking.Models
 {
     public class UserParking
     {
-        private int userId;
-        private string parkingName;
-        private DateTime parkDate;
+        [Key]
+        public int UserID { get; set; }
 
-        public int UserId
-        {
-            get { return userId; }
-            set { userId = value; }
-        }
+        public string ParkingName { get; set; }
 
-        public string ParkingName
-        {
-            get { return parkingName; }
-            set { parkingName = value; }
-        }
-
-        public DateTime ParkDate
-        {
-            get { return parkDate; }
-            set { parkDate = value; }
-        }
-
-        public UserParking()
-        {
-
-        }
+        public DateTime ParkDate { get; set; }
     }
 }

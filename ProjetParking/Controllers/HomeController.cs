@@ -16,17 +16,23 @@ namespace ProjetParking.Controllers
             return View();
         }
 
-        //POST : UserParking
         [HttpPost]
-        public ActionResult Index(int userId, string parkingName, DateTime parkDate)
+        public ActionResult Index(int userId = 0, string parkingName = "")
         {
-            UserParking parked = new UserParking { UserId = userId, ParkingName = parkingName, ParkDate = parkDate };
+            try
+            {
+                UserParking parked = new UserParking { UserID = userId, ParkingName = parkingName, ParkDate = DateTime.Now };
 
-            db.UserParkings.Add(parked);
+                db.UserParkings.Add(parked);
 
-            db.SaveChanges();
+                db.SaveChanges();
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         public ActionResult About()
