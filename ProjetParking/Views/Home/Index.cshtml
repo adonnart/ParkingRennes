@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ProjetParking.Models.UserParking
+
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -25,18 +27,16 @@
         var parkingIcon = L.icon({
             iconUrl: 'https://img.icons8.com/color/48/000000/parking.png',
 
-            iconSize: [30, 30],
-            iconAnchor: [15, 15],
-            popupAnchor: [0, -18]
+            iconSize: [30, 30], // size of the icon
+            iconAnchor: [15, 15], // point of the icon which will correspond to marker's location
+            popupAnchor: [0, -18] // point from which the popup should open relative to the iconAnchor
         });
-        //darkmode: https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png
-        //https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}
-        //https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png
-        L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
             id: 'mapbox.streets',
-            ext: 'png'
+            accessToken: 'your.mapbox.access.token'
         }).addTo(mymap);
 
         var markers = L.layerGroup();
@@ -65,7 +65,7 @@
         }
 
         mymap.on('click', onMapClick);
-
+        
         function updateMap(wsg) {
             $.get("https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=export-api-parking-citedia", { 'geofilter.distance': wsg },
                 function (data, status) {
@@ -79,7 +79,12 @@
                         var x = record.geometry.coordinates[1];
                         var y = record.geometry.coordinates[0];
                         var marker = L.marker([x, y], { icon: parkingIcon }).addTo(mymap);
-                        marker.bindPopup("<b>" + record.fields.key + "</b><br>" + record.fields.free + "/" + record.fields.max + "<br><span class='badge badge-success'>" + record.fields.status + "</span><br><br><button class='btn btn-secondary'>Visiter</button>").openPopup();
+                        marker.bindPopup("<b>" + record.fields.key + "</b><br>" + record.fields.free + "/" + record.fields.max +
+                            "<br><span class='badge badge-success'>" + record.fields.status + "</span><br>" +
+                            "<form action='/' method='post'>" +
+                            "<input id='parkingName' name='parkingName' type='hidden' value='" + record.fields.key + "' />" +
+                            "<input type='submit' value='Choisir' class='btn btn-primary' />" +
+                            "</form>").openPopup();
                         markers.addLayer(marker);
                         if (i == 0) {
                             first = marker;
@@ -88,15 +93,14 @@
                     if (first != null) {
                         first.openPopup();
                     }
-                    mymap.invalidateSize();
                 });
         }
 
-        
+        mymap.invalidateSize();
 
         $('#formSeacrh').submit(function (e) {
             e.preventDefault();
-            $.get("https://api.opencagedata.com/geocode/v1/json?q=" + $('#recherche').val()+"&key=5b590915216c4680bb6bf799921cf73b",
+            $.get("https://api.opencagedata.com/geocode/v1/json?q=" + $('#recherche').val() + "&key=5b590915216c4680bb6bf799921cf73b",
                 function (data, status) {
                     console.log(data.results[0].geometry);
                     circles.clearLayers();
