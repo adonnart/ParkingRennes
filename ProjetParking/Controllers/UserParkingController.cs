@@ -9,7 +9,7 @@ namespace ProjetParking.Controllers
 {
     public class UserParkingController : Controller
     {
-        private Context db = new Context();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: UserParking
         public ActionResult Index()
@@ -31,11 +31,11 @@ namespace ProjetParking.Controllers
 
         // POST: UserParking/Create
         [HttpPost]
-        public ActionResult Create(int userId, string parkingName, DateTime parkDate)
+        public ActionResult Create(string userId, string parkingName, DateTime parkDate)
         {
             try
             {
-                UserParking parked = new UserParking { UserID = userId, ParkingName = parkingName, ParkDate = parkDate };
+                UserParking parked = new UserParking { UserId = userId, ParkingName = parkingName, ParkDate = parkDate };
 
                 db.UserParkings.Add(parked);
 

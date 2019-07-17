@@ -1,4 +1,5 @@
-﻿using ProjetParking.Models;
+﻿using Microsoft.AspNet.Identity;
+using ProjetParking.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace ProjetParking.Controllers
 {
     public class HomeController : Controller
     {
-        private Context db = new Context();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ActionResult Index()
         {
@@ -17,15 +18,20 @@ namespace ProjetParking.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(int userId = 0, string parkingName = "")
+        public ActionResult Index(string parkingName)
         {
             try
             {
-                UserParking parked = new UserParking { UserID = userId, ParkingName = parkingName, ParkDate = DateTime.Now };
+                string userId = User.Identity.GetUserId();
 
-                db.UserParkings.Add(parked);
+                if (userId != "")
+                {
+                    UserParking parked = new UserParking { UserId = userId, ParkingName = parkingName, ParkDate = DateTime.Now };
 
-                db.SaveChanges();
+                    db.UserParkings.Add(parked);
+
+                    db.SaveChanges();
+                }
 
                 return RedirectToAction("Index");
             }
@@ -35,11 +41,15 @@ namespace ProjetParking.Controllers
             }
         }
 
-        public ActionResult About()
+        public ActionResult Profil()
         {
-            ViewBag.Message = "Your application description page.";
+            List<UserParking> visitedParkings = new List<UserParking>();
 
-            return View();
+            string userId = User.Identity.GetUserId();
+
+            visitedParkings = db.UserParkings.Where(p => p.UserId == userId).ToList();
+
+            return View(visitedParkings);
         }
 
         public ActionResult Contact()

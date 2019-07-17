@@ -18,10 +18,7 @@
     </div>
 </div>
 
-@using (Html.BeginForm())
-{
-    <div id="mapid"></div>
-}
+<div id="mapid"></div>
 
 @section scripts {
     <script type="text/javascript">
@@ -51,12 +48,6 @@
         var wsg84 = '48.114,-1.683, 1000';
 
         updateMap(null);
-        
-        /*
-        var user = UserManager.FindById(User.Identity.GetUserId());
-        alert(user.id + " " + Date.now());
-        record.fields.key + " " +
-        */
 
         function onMapClick(e) {
             circles.clearLayers();
@@ -74,7 +65,7 @@
         }
 
         mymap.on('click', onMapClick);
-
+        
         function updateMap(wsg) {
             $.get("https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=export-api-parking-citedia", { 'geofilter.distance': wsg },
                 function (data, status) {
@@ -90,9 +81,10 @@
                         var marker = L.marker([x, y], { icon: parkingIcon }).addTo(mymap);
                         marker.bindPopup("<b>" + record.fields.key + "</b><br>" + record.fields.free + "/" + record.fields.max +
                             "<br><span class='badge badge-success'>" + record.fields.status + "</span><br>" +
-                            //"<input id='userId' name='userId' type='hidden' value='" + UserManager.FindById(User.Identity.GetUserId()) + "' />" +
-                            //"<input id='parkingName' name='parkingName' type='hidden' value='" + record.fields.key + "' />" +
-                            "<input type='submit' value='Choisir' class='btn btn-primary' />").openPopup();
+                            "<form action='/' method='post'>" +
+                            "<input id='parkingName' name='parkingName' type='hidden' value='" + record.fields.key + "' />" +
+                            "<input type='submit' value='Choisir' class='btn btn-primary' />" +
+                            "</form>").openPopup();
                         markers.addLayer(marker);
                         if (i == 0) {
                             first = marker;

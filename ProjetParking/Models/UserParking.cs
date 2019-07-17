@@ -9,7 +9,9 @@ namespace ProjetParking.Models
     public class UserParking
     {
         [Key]
-        public int UserID { get; set; }
+        public int UserParkingId { get; set; }
+
+        public string UserId { get; set; }
 
         public string ParkingName { get; set; }
 

@@ -3,7 +3,7 @@ namespace ProjetParking.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Park : DbMigration
     {
         public override void Up()
         {
@@ -29,6 +29,17 @@ namespace ProjetParking.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.RoleId);
+            
+            CreateTable(
+                "dbo.UserParkings",
+                c => new
+                    {
+                        UserParkingId = c.Int(nullable: false, identity: true),
+                        UserId = c.String(),
+                        ParkingName = c.String(),
+                        ParkDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.UserParkingId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -92,6 +103,7 @@ namespace ProjetParking.Migrations
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
+            DropTable("dbo.UserParkings");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
         }
