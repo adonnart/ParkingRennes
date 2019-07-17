@@ -4,29 +4,49 @@
     ViewBag.Title = "Profil";
 }
 
-<h2>Profil</h2>
+<h5>Profil</h5>
 
-<h2>Historique</h2>
+<h1 class="h3 mb-3 text-gray-800">Historique</h1>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ParkingName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ParkDate)
-        </th>
-    </tr>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Derniers parkings visités</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tableHistorique" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ParkingName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ParkDate)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ParkingName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ParkDate)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ParkingName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ParkDate)
-        </td>
-    </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        $('#tableHistorique').DataTable();
+    </script>
 }
-
-</table>
