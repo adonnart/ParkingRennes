@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using ProjetParking.Controllers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,10 +14,14 @@ namespace ProjetParking
         {
             ConfigureAuth(app);
 
+            Timer timer = null;
             Task.Factory.StartNew(()=>
             {
-                Thread.Sleep(TimeSpan.FromMinutes(10));
-
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+                timer = new Timer((e) =>
+                {
+                    new HomeController().GetStats();
+                }, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
             });
         }
     }
