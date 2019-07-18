@@ -32,8 +32,13 @@ namespace ProjetParking
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
-            bundles.Add(new ScriptBundle("~/Content/datatables").Include(
+            bundles.Add(new StyleBundle("~/Content/datatables").Include(
                   "~/Content/dataTables.bootstrap4.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/charts").Include(
+                "~/Scripts/Chart.min.js",
+                "~/Scripts/chart-bar.js",
+                "~/Scripts/chart-area.js"));
         }
     }
 }
