@@ -1,5 +1,5 @@
 ﻿body {
-    padding-bottom: 20px;
+
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -54,4 +54,16 @@ textarea {
 .bg-login-image {
     background-image: url('https://www.batirama.com/scaled/983/755/1/2019/03/04/111328/images/article/25939-_00navigation.jpg');
     background-size: cover;
+}
+
+.text-gold {
+    color: #fdcb6e;
+}
+
+.text-argent {
+    color: #b2bec3;
+}
+
+.text-bronze {
+    color: #e17055;
 }

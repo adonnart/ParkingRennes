@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace ProjetParking.Controllers
 {
@@ -75,9 +76,63 @@ namespace ProjetParking.Controllers
 
         public ActionResult Stats()
         {
-            ViewBag.Message = "Your contact page.";
+
+            string userId = User.Identity.GetUserId();
+
+            int nbParkingsVisitedUser = db.UserParkings.Where(p => p.UserId == userId).Count();
+            int nbParkingsVisited = db.UserParkings.Count();
+            int nbUsers = db.Users.Count();
+
+            /**/
+            var classementUser = (from p in db.UserParkings
+                      group p by p.UserId into g
+                      select new
+                      {
+                          Id = g.Key,
+                          Count = g.Count()
+                      }).Where(y => y.Id != null)
+                      .OrderByDescending(z => z.Count);
+
+            int positionUser = 1;
+            foreach (var item in classementUser)
+            {
+                if (item.Id == User.Identity.GetUserId())
+                {
+                    break;
+                }
+                positionUser++;
+            }
+            /**/
+
+            ViewBag.NbParkingsVisitedUser = nbParkingsVisitedUser;
+            ViewBag.NbParkingsVisited = nbParkingsVisited;
+            ViewBag.NbUsers = nbUsers;
+            ViewBag.ClassementUser = positionUser + (positionUser == 1 ? "er" : "ème");
 
             return View();
+        }
+
+        public void GetFrequentations()
+        {
+            string userId = User.Identity.GetUserId();
+
+            var classementParkingUser = (from p in db.UserParkings
+                                         group p by p.ParkingName into g
+                                         select new
+                                         {
+                                             Id = g.Key,
+                                             Count = g.Where(t => t.UserId == userId).Count()
+                                         }).Where(y => y.Count > 0).OrderBy(z => z.Count).ToList();
+
+            System.Diagnostics.Debug.WriteLine(classementParkingUser);
+            var jsonSerialiser = new JavaScriptSerializer();
+            var json = jsonSerialiser.Serialize(classementParkingUser);
+
+
+            Response.Clear();
+            Response.ContentType = "application/json; charset=utf-8";
+            Response.Write(json);
+            Response.End();
         }
     }
 }

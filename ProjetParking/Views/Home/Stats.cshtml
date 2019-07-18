@@ -14,8 +14,8 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Parking visités (Par mois)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">40</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Parking visités</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.NbParkingsVisitedUser</div>
                     </div>
                     <div class="col-auto">
                         <i class="fa fa-map-marker fa-2x text-gray-300" aria-hidden="true"></i>
@@ -29,11 +29,11 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Parking visités (Par années)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">80</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Parking visités (Total tout utilisateur)</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.NbParkingsVisited</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fa fa-calendar-o fa-2x text-gray-300" aria-hidden="true"></i>
+                        <i class="fa fa-calculator fa-2x text-gray-300" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
@@ -44,11 +44,11 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Parking visités (Total tout utilisateur)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">560</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Nombre de Finders</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.NbUsers</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fa fa-calculator fa-2x text-gray-300" aria-hidden="true"></i>
+                        <i class="fa fa-users fa-2x text-gray-300" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
@@ -59,11 +59,26 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Nombre d'utilisateurs</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">26</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Classement Finders</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.ClassementUser</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fa fa-users fa-2x text-gray-300" aria-hidden="true"></i>
+                        @if (ViewBag.ClassementUser == "1er")
+                        {
+                            <i class="fa fa-trophy fa-2x text-gold" aria-hidden="true"></i>
+                        }
+                        else if (ViewBag.ClassementUser == "2ème")
+                        {
+                            <i class="fa fa-trophy fa-2x text-argent" aria-hidden="true"></i>
+                        }
+                        else if (ViewBag.ClassementUser == "3ème")
+                        {
+                            <i class="fa fa-trophy fa-2x text-bronze" aria-hidden="true"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-certificate fa-2x text-gray-300" aria-hidden="true"></i>
+                        }
                     </div>
                 </div>
             </div>
