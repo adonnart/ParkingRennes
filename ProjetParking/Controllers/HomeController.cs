@@ -72,5 +72,12 @@ namespace ProjetParking.Controllers
 
             return View();
         }
+
+        public ActionResult Stats()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
     }
 }
