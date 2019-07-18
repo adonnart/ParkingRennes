@@ -41,13 +41,17 @@ $.get('http://localhost:61158/Home/GetFrequentations', function (data) {
         }
     }
 
+    console.log(keys);
+    console.log(values);
+    console.log(yMax);
+
     var ctx = document.getElementById("myBarChart");
     var myBarChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: keys,
             datasets: [{
-                label: "Revenue",
+                label: "Visites",
                 backgroundColor: "#4e73df",
                 hoverBackgroundColor: "#2e59d9",
                 borderColor: "#4e73df",
@@ -82,7 +86,7 @@ $.get('http://localhost:61158/Home/GetFrequentations', function (data) {
                     ticks: {
                         min: 0,
                         max: yMax,
-                        maxTicksLimit: 5,
+                        maxTicksLimit: yMax*2,
                         padding: 10,
                         // Include a dollar sign in the ticks
                         callback: function (value, index, values) {
@@ -116,7 +120,7 @@ $.get('http://localhost:61158/Home/GetFrequentations', function (data) {
                 callbacks: {
                     label: function (tooltipItem, chart) {
                         var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                        return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                        return datasetLabel + ' ' + number_format(tooltipItem.yLabel);
                     }
                 }
             },
