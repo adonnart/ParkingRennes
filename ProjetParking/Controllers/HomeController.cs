@@ -65,7 +65,7 @@ namespace ProjetParking.Controllers
         private const string URL = "https://data.rennesmetropole.fr/api/records/1.0/search";
         private string urlParameters = "?dataset=export-api-parking-citedia";
 
-        public void Stats()
+        public void GetStats()
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(URL);

@@ -20,7 +20,7 @@ namespace ProjetParking
                 Thread.Sleep(TimeSpan.FromSeconds(1));
                 timer = new Timer((e) =>
                 {
-                    new HomeController().Stats();
+                    new HomeController().GetStats();
                 }, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
             });
         }
