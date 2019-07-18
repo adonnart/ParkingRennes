@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ProjetParking.Models.ParkingStats>
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ParkingName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NbPlacesOccupees)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NbPlacesTotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StatDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParkingName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NbPlacesOccupees)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NbPlacesTotal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ParkingStatsId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ParkingStatsId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ParkingStatsId })
+        </td>
+    </tr>
+}
+
+</table>
