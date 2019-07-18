@@ -40,6 +40,9 @@ $.get('http://localhost:61158/Home/GetFrequentations', function (data) {
             yMax = data[key].Count;
         }
     }
+    console.log(keys);
+    console.log(values);
+    console.log(yMax);
 
     var ctx = document.getElementById("myBarChart");
     var myBarChart = new Chart(ctx, {
