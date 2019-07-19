@@ -67,3 +67,14 @@ textarea {
 .text-bronze {
     color: #e17055;
 }
+
+.notif {
+    position: absolute;
+    z-index: 10000;
+    top: 30px;
+    right: 30px;
+}
+
+.notif .alert {
+    width: 300px;
+}

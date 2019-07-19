@@ -103,7 +103,16 @@
     <div class="col-md-6">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Fréquentation globale des parkings</h6>
+                <div class="row">
+                    <h6 class="m-0 col font-weight-bold text-primary">Fréquentation globale des parkings</h6>
+                    <select class="col custom-select mr-3 update" id="parking">
+                        @foreach (var parking in (List<string>)ViewBag.Parkings)
+                        {
+                            <option>@parking</option>
+                        }
+                    </select>
+                    <input class="col form-control update" type="date" id="date" />
+                </div>
             </div>
             <div class="card-body">
                 <div class="chart-area">
@@ -117,7 +126,12 @@
 </div>
 
 @section scripts {
-    @Scripts.Render("~/bundles/charts")
     <script type="text/javascript">
+
+        document.getElementById("date").valueAsDate = new Date();
+
+
     </script>
+    @Scripts.Render("~/bundles/charts")
+
 }

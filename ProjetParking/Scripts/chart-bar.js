@@ -44,10 +44,6 @@ $.get('http://localhost:61158/Home/GetFrequentations', function (data) {
     console.log(values);
     console.log(yMax);
 
-    console.log(keys);
-    console.log(values);
-    console.log(yMax);
-
     var ctx = document.getElementById("myBarChart");
     var myBarChart = new Chart(ctx, {
         type: 'bar',

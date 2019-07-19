@@ -4,12 +4,30 @@
     ViewBag.Title = "Home Page";
 }
 
+
+@if (ViewBag.Message != null)
+{
+    <div class="notif">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>@ViewBag.Message</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+}
+
+
 <div class="absolute">
     <div class="container">
         <form class="mt-3" id="formSeacrh">
             <div class="form-group">
                 <label for="recherche">Rechercher</label>
                 <input type="text" class="form-control" id="recherche" aria-describedby="recherche" placeholder="Adresse, Lieu">
+            </div>
+            <div class="form-group">
+                <label for="rayon">Rayon de recherche (<b><span id="displayRayon">500</span>m</b>)</label>
+                <input type="range" class="form-control-range" id="rayon" min="500" max="1500" step="100" value="500">
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-block btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Rechercher</button>
@@ -22,6 +40,13 @@
 
 @section scripts {
     <script type="text/javascript">
+
+        var rayon = 500;
+
+        $("#rayon").change(function (e) {
+            rayon = $(this).val();
+            $("#displayRayon").html(rayon);
+        });
 
         var mymap = L.map('mapid').setView([48.112, -1.684], 13);
 
@@ -54,14 +79,14 @@
 
         function onMapClick(e) {
             circles.clearLayers();
-            wsg84 = e.latlng.lat + ',' + e.latlng.lng + ',500';
+            wsg84 = e.latlng.lat + ',' + e.latlng.lng + ',' + rayon;
             updateMap(wsg84);
             var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
             var circle = L.circle([e.latlng.lat, e.latlng.lng], {
                 color: '#ff9999',
                 fillColor: '#ffcccc',
                 fillOpacity: 0.5,
-                radius: 500
+                radius: rayon
             }).addTo(mymap);
             circles.addLayer(circle);
             circles.addLayer(marker);
@@ -87,10 +112,10 @@
                             "<form action='/' method='post' class='mt-3'>" +
                             "<input id='parkingName' name='parkingName' type='hidden' value='" + record.fields.key + "' />" +
                             '<a href="#ss" class="btn btn-primary btn-icon-split text-white" onclick="this.parentNode.submit(); return false;">' +
-                                '<span class="icon text-white-50">' +
-                                    '<i class="fa fa-check"></i>' +
-                                '</span>' +
-                                '<span class="text">Choisir</span>' +
+                            '<span class="icon text-white-50">' +
+                            '<i class="fa fa-check"></i>' +
+                            '</span>' +
+                            '<span class="text">Choisir</span>' +
                             '</a>' +
                             "</form>").openPopup();
                         markers.addLayer(marker);
@@ -112,14 +137,14 @@
                 function (data, status) {
                     console.log(data.results[0].geometry);
                     circles.clearLayers();
-                    wsg84 = data.results[0].geometry.lat + ',' + data.results[0].geometry.lng + ',500';
+                    wsg84 = data.results[0].geometry.lat + ',' + data.results[0].geometry.lng + ',' + rayon;
                     updateMap(wsg84);
                     var marker = L.marker([data.results[0].geometry.lat, data.results[0].geometry.lng]).addTo(mymap);
                     var circle = L.circle([data.results[0].geometry.lat, data.results[0].geometry.lng], {
                         color: '#ff9999',
                         fillColor: '#ffcccc',
                         fillOpacity: 0.5,
-                        radius: 500
+                        radius: rayon
                     }).addTo(mymap);
                     circles.addLayer(circle);
                     circles.addLayer(marker);

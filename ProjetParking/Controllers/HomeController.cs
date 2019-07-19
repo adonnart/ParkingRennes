@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using System.Data.Entity;
 
 namespace ProjetParking.Controllers
 {
@@ -29,6 +30,8 @@ namespace ProjetParking.Controllers
         {
             try
             {
+                ViewBag.Message = "Vous avez choisis le parking " + parkingName;
+
                 string userId = User.Identity.GetUserId();
 
                 if (userId != "")
@@ -44,7 +47,7 @@ namespace ProjetParking.Controllers
                     db.SaveChanges();
                 }
 
-                return RedirectToAction("Index");
+                return View();
             }
             catch
             {
@@ -150,10 +153,23 @@ namespace ProjetParking.Controllers
             }
             /**/
 
+            var parkingList = new List<string>();
+            var parkings = (from p in db.ParkingStats
+                           select new
+                           {
+                               Name = p.ParkingName
+                           }).Distinct().ToList();
+
+            foreach (var item in parkings)
+            {
+                parkingList.Add(item.Name);
+            }
+
             ViewBag.NbParkingsVisitedUser = nbParkingsVisitedUser;
             ViewBag.NbParkingsVisited = nbParkingsVisited;
             ViewBag.NbUsers = nbUsers;
             ViewBag.ClassementUser = positionUser + (positionUser == 1 ? "er" : "ème");
+            ViewBag.Parkings = parkingList;
 
             return View();
         }
@@ -173,6 +189,32 @@ namespace ProjetParking.Controllers
             System.Diagnostics.Debug.WriteLine(classementParkingUser);
             var jsonSerialiser = new JavaScriptSerializer();
             var json = jsonSerialiser.Serialize(classementParkingUser);
+
+
+            Response.Clear();
+            Response.ContentType = "application/json; charset=utf-8";
+            Response.Write(json);
+            Response.End();
+        }
+
+        public void GetFrequentationParking(string parking, string date)
+        {
+
+            DateTime datetime = Convert.ToDateTime(date);
+
+            var parkingList = (from p in db.ParkingStats
+                               where p.ParkingName == parking
+                               && DbFunctions.TruncateTime(p.StatDate) == DbFunctions.TruncateTime(datetime)
+                               group p by p.StatDate.Hour into g
+                            select new
+                            {
+                                Hour = g.Key,
+                                Value = g.Average(s => (s.NbPlacesTotal - s.NbPlacesLibres) / (float)s.NbPlacesTotal * 100)
+                            });
+
+
+            var jsonSerialiser = new JavaScriptSerializer();
+            var json = jsonSerialiser.Serialize(parkingList);
 
 
             Response.Clear();
