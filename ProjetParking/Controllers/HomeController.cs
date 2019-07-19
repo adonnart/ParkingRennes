@@ -142,14 +142,17 @@ namespace ProjetParking.Controllers
                                   }).Where(y => y.Id != null)
                       .OrderByDescending(z => z.Count);
 
-            int positionUser = 1;
+            int positionUser = 0;
             foreach (var item in classementUser)
             {
+                positionUser++;
+                System.Diagnostics.Debug.WriteLine(item);
+
                 if (item.Id == User.Identity.GetUserId())
                 {
                     break;
                 }
-                positionUser++;
+
             }
             /**/
 
