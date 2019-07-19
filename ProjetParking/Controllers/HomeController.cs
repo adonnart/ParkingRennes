@@ -30,7 +30,7 @@ namespace ProjetParking.Controllers
         {
             try
             {
-                ViewBag.Message = "Vous avez choisis le parking " + parkingName;
+                ViewBag.Message = "Vous avez choisi le parking " + parkingName;
 
                 string userId = User.Identity.GetUserId();
 

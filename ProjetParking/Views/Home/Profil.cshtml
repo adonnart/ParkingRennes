@@ -47,6 +47,8 @@
 
 @section scripts {
     <script type="text/javascript">
-        $('#tableHistorique').DataTable();
+        $('#tableHistorique').DataTable({
+            "order": [[1, "desc"]]
+        });
     </script>
 }
